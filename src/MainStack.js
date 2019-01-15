@@ -6,6 +6,8 @@ import War from './Game/War'
 
 import {YellowBox} from 'react-native';
 import Rank from './Ranking/Rank';
+import ContactInvite from './Invite/ContactInvite';
+import InitRoom from './Game/InitRoom';
 YellowBox.ignoreWarnings(['Warning: ReactNative.createElement']);
 
 const  MainStack = createStackNavigator({
@@ -20,6 +22,12 @@ const  MainStack = createStackNavigator({
     },
     War: {
         screen:War
+    },
+    Contact:{
+        screen: ContactInvite
+    },
+    GoRoom:{
+        screen:InitRoom
     }
 
 },{

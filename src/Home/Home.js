@@ -6,6 +6,13 @@ import {Avatar} from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Modal from 'react-native-modal'
 
+import {
+    MenuProvider,
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+  } from 'react-native-popup-menu';
 
 export default class Home extends Component {
   constructor(props) {
@@ -70,15 +77,21 @@ export default class Home extends Component {
   }
 
   onToTrain(){
-
+    this.setState({
+        isVisible:false
+    })
   }
 
   onToRoom(){
-
+    this.setState({
+        isVisible:false
+    })
+    this.props.navigation.navigate('GoRoom')
   }
 
   render() {
     return (
+        <MenuProvider>
       <View style={styles.container}>
         <View style = {styles.homeHeader}>
             <View style = {styles.leftHeader}>
@@ -107,13 +120,17 @@ export default class Home extends Component {
                 </View>
             </View>
             <View style = {styles.rightHeader}>
-                <TouchableOpacity onPress={()=> {this.onAddFriend()}}>
-                    <Ionicons
-                        name='md-person-add'
-                        color='#ff9933'
-                        size={30}
-                    />
-                </TouchableOpacity>
+            <Menu>
+                <MenuTrigger text='Invite' customStyles={triggerStyles} />
+                <MenuOptions>
+                    <MenuOption onSelect={() => console.log("FB...")}>
+                        <Text style={{color:'blue'}}>Your Friend FB</Text>
+                    </MenuOption>
+                    <MenuOption onSelect={() => this.props.navigation.navigate('Contact')}> 
+                        <Text style={{color: 'red'}}>Your Phone contact</Text>
+                    </MenuOption>
+                </MenuOptions>
+                </Menu>
                 
             </View>
             
@@ -198,23 +215,24 @@ export default class Home extends Component {
             onBackdropPress={() => this.setState({ isVisible: false })}
             style={styles.modalContainer}
             >
-        <TouchableOpacity 
-            style={styles.topOption}
-            onPress={()=> {this.onToWar()}}>
-            <Text style={styles.textOption}>War</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-            style={styles.midOption}
-            onPress={()=> {this.onToTrain()}}>
-            <Text style={styles.textOption}>Train</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-            style={styles.bottomOption}
-            onPress={()=> {this.onToRoom()}}>
-            <Text style={styles.textOption}>Room</Text>
-        </TouchableOpacity>
-      </Modal>
+            <TouchableOpacity 
+                style={styles.topOption}
+                onPress={()=> {this.onToWar()}}>
+                <Text style={styles.textOption}>War</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.midOption}
+                onPress={()=> {this.onToTrain()}}>
+                <Text style={styles.textOption}>Train</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.bottomOption}
+                onPress={()=> {this.onToRoom()}}>
+                <Text style={styles.textOption}>Room</Text>
+            </TouchableOpacity>
+        </Modal>
       </View>
+      </MenuProvider>
     );
   }
 }
@@ -341,3 +359,19 @@ const styles=StyleSheet.create({
         fontSize:20
     }
 })
+
+const triggerStyles={
+    triggerText: {
+        color: 'white',
+      },
+      triggerWrapper: {
+        padding: 5,
+        backgroundColor: 'blue',
+        borderRadius:5
+      },
+      triggerTouchable: {
+        underlayColor: 'darkblue',
+        activeOpacity: 70,
+      },
+      TriggerTouchableComponent: TouchableOpacity,
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-    View, Text, StyleSheet
+    View, Text, StyleSheet, Image
 } from 'react-native';
 
 import {Avatar} from 'react-native-elements'
@@ -30,6 +30,10 @@ export default class RankingItem extends Component{
 
         <View style={styles.score}>
             <Text>{this.props.score}</Text>
+            <Image
+                source={require('../../Media/coin.png')}
+                style={styles.iconScore}
+            />
         </View>
 
       </View>
@@ -60,7 +64,13 @@ const styles = StyleSheet.create({
     },
     score:{
         flex:2,
+        flexDirection:'row',
         justifyContent:'center',
         alignItems:"center"
+    },
+    iconScore:{
+        height:20,
+        width:20,
+        margin:5
     }
 })

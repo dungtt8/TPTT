@@ -35,15 +35,11 @@ export default class componentName extends Component {
             })
         })
       })
-      
+
 
     
   }
-  componentWillUnmount(){
-      this.setState({
-          isVisible:false
-      })
-  }
+  
 
   onSendAnswer(answer){
     SendAnswer("1123123", answer)
@@ -76,11 +72,14 @@ export default class componentName extends Component {
   }
 
   render() {
+      if(!this.state.isGameStart){
+          return (
+              <ActivityIndicator size="large" color="#0000ff"/>
+          )
+      }
     return (
       <View style={styles.container}>
-        <ActivityIndicator
-            hidesWhenStopped={!this.props.isGameStart}
-        />
+        
         <View style = {styles.homeHeader}>
             <View style = {styles.leftHeader}>
                 <Avatar
