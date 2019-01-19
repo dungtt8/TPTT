@@ -4,11 +4,13 @@ import {
  } from 'react-native';
 
  import {SigIn} from '../../Network/API';
+import Global from '../../Util/Global';
 
 
 export default class LoginScreen extends Component {
     constructor(props){
         super(props)
+        // Global.currentUser = "DungTT"
     }
     state = { 
         phone:'',
@@ -18,7 +20,9 @@ export default class LoginScreen extends Component {
      Login(){
          SigIn(this.state.phone, this.state.password)
          .then(res =>{
-             console.log(res)
+            //  console.log(res)
+             Global.currentUser = res
+            //  console.log(currentUser)
             this.props.navigation.navigate('Home')
          })
         

@@ -8,6 +8,9 @@ import {YellowBox} from 'react-native';
 import Rank from './Ranking/Rank';
 import ContactInvite from './Invite/ContactInvite';
 import InitRoom from './Game/InitRoom';
+import WaitRoom from './Game/WaitRoom';
+import Change from './ChangeReward/Change';
+import TabRank from './Ranking/TabRank';
 YellowBox.ignoreWarnings(['Warning: ReactNative.createElement']);
 
 const  MainStack = createStackNavigator({
@@ -15,24 +18,36 @@ const  MainStack = createStackNavigator({
         screen:LoginScreen,
     },
     Home:{
-        screen:Home
+        screen:Home,
     },
     Ranking:{
-        screen: Rank
+        screen: Rank,
     },
     War: {
-        screen:War
+        screen:War,
     },
     Contact:{
-        screen: ContactInvite
+        screen: ContactInvite,
     },
     GoRoom:{
-        screen:InitRoom
+        screen:InitRoom,
+    },
+    WaitRoom:{
+        screen:WaitRoom,
+    },
+    Change: {
+        screen:Change
     }
 
 },{
     headerMode: "none"
 })
+
+MainStack.navigationOptions = ({navigation}) =>{
+    let headerMode = "float"
+    console.log(navigation)
+    return headerMode   
+}
 
 const App = createAppContainer(MainStack);
 

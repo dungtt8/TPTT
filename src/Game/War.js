@@ -6,6 +6,8 @@ import TimerCountdown from 'react-native-timer-countdown';
 import {GetQuestion, SendAnswer, RegisterGame} from '../../Network/API'
 import Modal from 'react-native-modal'
 
+import Global from '../../Util/Global';
+
 export default class componentName extends Component {
   constructor(props) {
     super(props);
@@ -90,14 +92,14 @@ export default class componentName extends Component {
                     activeOpacity={0.7}
                 />
                 <View>
-                    <Text style={styles.userName}>Nguyen Van A</Text>
+                    <Text style={styles.userName}>{Global.currentUser.userName}</Text>
                     <View style = {styles.rawInfo}>
-                        <Text>1500</Text>
+                        <Text>{Global.currentUser.score}</Text>
                         <Image
                             source={require('../../Media/coin.png')}
                             style={styles.ImageRawInfo}
                         />
-                        <Text>100</Text>
+                        <Text>{Global.currentUser.index}</Text>
                         <Image
                             source={require('../../Media/star.png')}
                             style={styles.ImageRawInfo}

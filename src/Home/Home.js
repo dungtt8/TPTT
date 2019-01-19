@@ -6,6 +6,8 @@ import {Avatar} from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Modal from 'react-native-modal'
 
+var Global = require('../../Util/Global')
+
 import {
     MenuProvider,
     Menu,
@@ -20,6 +22,7 @@ export default class Home extends Component {
     this.state = {
         isVisible: false
     };
+    // console.log(Global.currentUser)
   }
 
   onAddFriend(){
@@ -46,7 +49,6 @@ export default class Home extends Component {
 
   componentDidMount() {
     var date = new Date().getDate()    
-    console.log(date)
     startTime = new Date(2019, 0, date, 20, 0, 0)
      
     setInterval( () => {
@@ -98,12 +100,12 @@ export default class Home extends Component {
                 <Avatar
                     medium
                     rounded
-                    source={{uri: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"}}
+                    source={{uri: Global.currentUser.userAvatar}}
                     onPress={() => console.log("Works!")}
                     activeOpacity={0.7}
                 />
                 <View>
-                    <Text style={styles.userName}>Nguyen Van A</Text>
+                    <Text style={styles.userName}>{Global.currentUser.userName}</Text>
                     <View style = {styles.rawInfo}>
                         <Text>1500</Text>
                         <Image

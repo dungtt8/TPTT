@@ -1,3 +1,5 @@
+import { SendUserData, CreateRoomFB, GetListRoom, UpdateListRoom } from "./FirebaseAPI";
+
 const URL = "https://vnexpress.net/"
 export function SigIn(phone, password){
     return fetch(URL, {
@@ -12,7 +14,16 @@ export function SigIn(phone, password){
           }),
         })
         .then(res =>
-            res
+            {
+                res = {
+                    userID: "1243451",
+                    userName: "DungTT",
+                    userAvatar: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                    score: 10,
+                    index:115
+                }
+                return res
+            }
         )
         .catch(err => {
             console.error(err)
@@ -209,31 +220,31 @@ export function SendAnswer(userID,answer){
                     {
                         RoomName: 'abc',
                         RoomID: '123556',
-                        CreateTime: '15 Feb 2019 11:00:00',
+                        StartTime: '15 Feb 2019 11:00:00',
                         Member: 5
                     },
                     {
                         RoomName: 'grt',
                         RoomID: '66783',
-                        CreateTime: '15 Feb 2019 11:00:00',
+                        StartTime: '15 Feb 2019 11:00:00',
                         Member: 5
                     },
                     {
                         RoomName: 'hjgy',
                         RoomID: '235',
-                        CreateTime: '15 Feb 2019 11:00:00',
+                        StartTime: '15 Feb 2019 11:00:00',
                         Member: 5
                     },
                     {
                         RoomName: 'fdvc sgf',
                         RoomID: '12456',
-                        CreateTime: '15 Feb 2019 11:00:00',
+                        StartTime: '15 Feb 2019 11:00:00',
                         Member: 5
                     },
                     {
                         RoomName: 'kui',
                         RoomID: '7894543',
-                        CreateTime: '15 Feb 2019 11:00:00',
+                        StartTime: '15 Feb 2019 11:00:00',
                         Member: 5
                     },
                 ]
@@ -242,7 +253,7 @@ export function SendAnswer(userID,answer){
         )
     }
 
-    export function JoinRoom(roomID, roomPass){
+    export function JoinRoom(roomID, roomPass, userData, callback){
         return fetch(URL, {
             method: 'POST',
             headers: {
@@ -251,13 +262,106 @@ export function SendAnswer(userID,answer){
               },
               body: JSON.stringify({
                 roomID: roomID,
-                roomPass: roomPass
+                roomPass: roomPass,
+                player:userData
               }),
             })
-            .then(res =>res
-            
+            .then(res =>{
+                res = userData
+                return GetListRoom((rooms) => {
+                    var roomGame;
+                    for (key in rooms){
+                        if(rooms[key].roomID == roomID){
+                            rooms[key].users.push(userData)
+                            roomGame = rooms[key]
+                            callback(roomGame)
+                        }
+                    }
+                    // console.log(room)
+                    UpdateListRoom(rooms)
+                    
+                })}            
             )
             .catch(err => {
                 console.error(err)
             });
+    }
+
+    export function CreateRoom(roomName, password, timeStart, rootUser){
+        return fetch(URL, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                roomName: roomName,
+                roomPass: password,
+                timeStart: timeStart,
+                rootUser: rootUser
+              }),
+            })
+            .then(res =>
+                {   
+                    var roomInfo = {
+                        roomID:'123556',
+                        roomName: roomName,
+                        timeStart:timeStart
+                    }
+                    return CreateRoomFB(roomInfo, rootUser).then((result) => result)
+                    
+                }
+            )
+            .catch(err => {
+                console.error(err)
+            });
+    }
+
+    export function OutRoom(player, room){
+        return fetch(URL, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                playerInfo: player,
+                roomInfo: room
+              }),
+            })
+            .then(res =>
+                {   
+                    GetListRoom((rooms)=>{
+                        for (key in rooms){
+                            if(rooms[key].roomID == room.roomID){
+                                var listUser = rooms[key].users
+                                for (var i = 0; i  < listUser.length; i++){
+                                    // console.log(user)
+                                    if (listUser[i].userName == player.userName){
+                                        
+                                        rooms[key].users.splice(i, 1)
+                                    }
+                                    
+                                }
+                                console.log(rooms[key].users.length)
+                                
+                                // roomGame = rooms[key]
+                                // callback(roomGame)
+                            }
+                        }
+                        // console.log(room)
+                        UpdateListRoom(rooms)
+                    })
+                    // return CreateRoomFB(roomInfo, rootUser).then((result) => result)
+                    
+                }
+            )
+            .catch(err => {
+                console.error(err)
+            });
+    }
+
+    export function SendInvite(list){
+        console.log(list)
+        return "ok"
     }

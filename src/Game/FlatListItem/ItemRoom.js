@@ -15,9 +15,9 @@ export default class componentName extends Component {
         <View style= {styles.container}>
             <View style = {styles.icon}><Icon name = 'home' color = '#fff' size={20}/></View>
             <Text style = {styles.name}>{this.props.RoomName}</Text>
-            <Text style = {styles.idRoom}>{this.props.RoomID}</Text>
-            <Text style = {styles.timeCreate}>{this.props.CreateTime}</Text>
-            <Text style = {styles.member}>{this.props.Member}</Text>
+            <Text style = {styles.idRoom}>ID: {this.props.RoomID}</Text>
+            <Text style = {styles.timeStart}>{this.props.StartTime}</Text>
+            <Text style = {styles.member}>Join: {this.props.Member}</Text>
         </View>
     );
   }
@@ -42,11 +42,11 @@ const styles= StyleSheet.create({
     idRoom:{
         flex:3
     },
-    timeCreate:{
+    timeStart:{
         flex:5
     },
     member:{
-        flex:1
+        flex:2
     },
     icon:{
         flex:1

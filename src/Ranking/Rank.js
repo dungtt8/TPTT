@@ -23,7 +23,7 @@ export default class Rank extends Component {
     }
 
     componentDidMount(){
-        console.log("did mount")
+        console.log("did mount in Rank component")
         GetRanking().then(res=>{
             this.setState({listPlayer:res})
             GetUserRanking().then(res =>{
@@ -55,7 +55,7 @@ export default class Rank extends Component {
     }
     return (
       <View style={styles.container}>
-
+        {console.log("In rank component")}
         <View style={styles.header}>
             <TouchableOpacity style={styles.leftHeader}
                 onPress={()=> {this.props.navigation.goBack()}}>
@@ -68,15 +68,15 @@ export default class Rank extends Component {
             <View style={styles.midHeader}>
                 <Text style = {styles.titleHeader}>Bảng xếp hạng</Text>
             </View>
-            <TouchableOpacity style = {styles.rightHeader}>
+            <TouchableOpacity style = {styles.rightHeader}
+                onPress = {()=> this.props.navigation.navigate('Change')}>
                 <Icon
                     name = "exchange"
                     color= '#fff'
                     size = {20}
                 />
             </TouchableOpacity>
-        </View>
-
+            </View>
         <View style={styles.TopRank}>
 
             <View style = {styles.Top3Ranking}>

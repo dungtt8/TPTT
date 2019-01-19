@@ -6,7 +6,8 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Contacts from 'react-native-contacts';
 import { CheckPermission } from '../../Util/CheckPermission';
 
-import SelectMultiple from 'react-native-select-multiple'
+import {CheckBox} from 'react-native-elements';
+import { SendInvite } from '../../Network/API';
 
 export default class ContactInvite extends Component {
     constructor(props){
@@ -15,7 +16,7 @@ export default class ContactInvite extends Component {
         this.state = {
             isLoaded:false,
             listContact : [],
-            selectedList:[]
+            
         }
     }
 
@@ -29,7 +30,7 @@ export default class ContactInvite extends Component {
                 throw err
             } 
             console.log(">>>>>>>")
-            console.log(contacts)
+            // console.log(contacts)
             this.setState({
                 listContact:contacts,
                 isLoaded: true
@@ -55,31 +56,76 @@ export default class ContactInvite extends Component {
                 }
                 var newItem = {
                     name : name,
-                    phoneNumber: item.phoneNumbers[0].number
+                    phoneNumber: item.phoneNumbers[0].number,
+                    isSelected : false
                 }
-    
                 this.list.push(newItem)
             }
             
         });
-        
+        this.setState({listContact : this.list})
 
     }
 
-    onSelectionsChange = (selectedList) => {
-        console.log(selectedList)
-        this.setState({ selectedList })
-        console.log(this.state.selectedList.length)
+    onInviteAll = ()=> {
+        var newList = this.state.listContact
+        for (var i = 0; i < newList.length; i++){
+                var newItem = {
+                    name : newList[i].name,
+                    phoneNumber: newList[i].phoneNumber,
+                    isSelected: true
+                }
+                newList[i] = newItem
+        }
+        this.setState({listContact:newList})
+    }
+
+    onSelectionsChange = (item) => {
+        var newList = this.state.listContact
+        for (var i = 0; i < newList.length; i++){
+            
+            if(item === newList[i]){
+                var newItem = {
+                    name : newList[i].name,
+                    phoneNumber: newList[i].phoneNumber,
+                    isSelected: true
+                }
+                newList[i] = newItem
+                break
+            }
+        }
+        this.setState({listContact:newList})
       }
 
-    // renderItem = ({item})=>{
-    //     console.log(item.phoneNumbers[0])
-    //     if (item.phoneNumbers[0]) return(
-    //     <View>
-    //         <Text>{item.givenName + ' ' + item.middleName + ' ' + item.familyName }</Text>
-    //         <Text>{item.phoneNumbers[0].number}</Text>
-    //     </View>
-    // )}
+    renderItem = ({item})=>
+      {
+          if(item.isSelected){
+              var color = 'rgba(255, 0, 0, 0.2)'
+          } else var color = 'rgba(0, 138, 230, 0.2)'
+        return (
+            <TouchableOpacity
+                onPress = {()=> this.onSelectionsChange(item)}>
+                <View style={{height:50, width:'100%', alignItems:'center',justifyContent:'space-between', padding:5, backgroundColor:color, marginVertical:1, flexDirection:'row'}}>
+                    <View>
+                        <Text style = {{fontSize:14, color:"#fff"}}>{item.name}</Text>
+                        <Text>{item.phoneNumber}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+      }
+    
+      sendInvite(){
+          var inviteList = []
+          for (var i = 0; i< this.state.listContact.length; i++){
+              if(this.state.listContact[i].isSelected){
+                  inviteList.push(this.state.listContact[i])
+              }
+          }
+          SendInvite(inviteList)
+          this.props.navigation.goBack()
+      }
+
   render() {
       if(!this.state.isLoaded){
         return(
@@ -104,27 +150,28 @@ export default class ContactInvite extends Component {
                     <Text style={styles.titleHeader}>List your contact</Text>
                 </View>
                 <View style = {styles.rightHeader}>
-
+                    <TouchableOpacity 
+                        style = {{height:30, width:50, backgroundColor:"#ff3344", borderRadius:5, justifyContent:'center', alignItems:'center'}}
+                        onPress = {()=> this.onInviteAll()}>
+                        <Text>All</Text>
+                    </TouchableOpacity>
                 </View>
 
                 
             </View>
             <View style={styles.body}>
                 <View style={styles.listSelect}>
-                    <SelectMultiple
-                        items={this.list}
-                        selectedItems={this.state.selectedList}
-                        onSelectionsChange={this.onSelectionsChange} />
-                        {/* <FlatList
+                        <FlatList
                             data = {this.state.listContact}
-                            keyExtractor = {(item) => item.toString()}
+                            keyExtractor = {(item) => item.name}
                             extraData = {this.state}
                             renderItem = {this.renderItem}
-                        /> */}
+                        />
                     </View>
-                <TouchableOpacity>
-                    <View style = {styles.btnSendInvite}>
-                        <Text style= {styles.textBtn}>Invite {this.state.selectedList.length} your Contact</Text>
+                <TouchableOpacity style = {styles.btnSendInvite}
+                    onPress={()=> this.sendInvite()}>
+                    <View >
+                        <Text style= {styles.textBtn}>Invite your Contact</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -173,13 +220,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width:'100%',
-        height:80,
+        height:"15%",
     },
     textBtn:{
         fontSize:20,
         color:'#fff'
     },
     listSelect:{
-
+        height: '85%',
+        width:'100%'
     }
 })

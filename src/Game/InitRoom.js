@@ -5,10 +5,13 @@ import {
 
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome'
-
-import {GetRoom, JoinRoom} from '../../Network/API'
-import ItemRoom from './FlatListItem/ItemRoom';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import Modal from 'react-native-modal';
+
+import {GetRoom, JoinRoom, CreateRoom} from '../../Network/API'
+import ItemRoom from './FlatListItem/ItemRoom';
+
+import Global from '../../Util/Global';
 
 export default class InitRoom extends Component {
   constructor(props) {
@@ -30,7 +33,8 @@ export default class InitRoom extends Component {
               isVisible:false,
               isVisible2:false,
               password:'',
-              GoID:''
+              GoID:'',
+              startTime: "Start Time"
           })
       })
   }
@@ -40,7 +44,7 @@ export default class InitRoom extends Component {
             <ItemRoom
                 RoomName = {item.RoomName}
                 RoomID = {item.RoomID}
-                CreateTime = {item.CreateTime}
+                StartTime = {item.StartTime}
                 Member = {item.Member}
             />
       </TouchableOpacity>
@@ -55,11 +59,27 @@ export default class InitRoom extends Component {
   }
 
   _joinRoom(){
-      this.setState({isVisible:false,
-    isLoaded:false})
-    console.log(this.state.GoID, this.state.password)
-    JoinRoom(this.state.GoID, this.state.password).then(res =>{
+      this.setState({
+          isVisible:false,
+          isLoaded:false})
+    // console.log(this.state.GoID, this.state.password)
+    var userData = Global.currentUser
+    JoinRoom(this.state.GoID, this.state.password, userData, (roomGame)=>{
         this.setState({isLoaded:true})
+        this.props.navigation.navigate('WaitRoom', {roomInfo: roomGame})
+    })
+  }
+
+  _createRoom(){
+    this.setState({
+        isVisible2:false,
+        isLoaded:false})
+        var userData = Global.currentUser
+    CreateRoom(this.state.roomNameCreate, this.state.passwordCreate, this.state.startTime, userData)
+        .then((res) =>{
+            console.log(res)
+            this.setState({isLoaded:true})
+            this.props.navigation.navigate('WaitRoom', {roomInfo: res})
     })
   }
 
@@ -73,6 +93,13 @@ export default class InitRoom extends Component {
           listRoom:list,
           query:searchInput
       })
+  }
+  
+  handleTimeStart(date){
+      var time = date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' +date.getMilliseconds()
+      this.setState({
+          startTime: time,
+          isDateTimePickerVisible:false})
   }
 
   render() {
@@ -158,9 +185,42 @@ export default class InitRoom extends Component {
                 onBackdropPress={() => this.setState({ isVisible2: false })}
                 style={styles.modalContainer}
                 >
-                <Text>Create Room</Text>
+                <TextInput
+                    onChangeText={(roomNameCreate) => this.setState({roomNameCreate})}
+                    value = {this.state.roomNameCreate}
+                    placeholder = "Type your Room Name"
+                    style = {styles.CreateTextInput}
+                    underlineColorAndroid='black'
+                />
+                <TextInput
+                    onChangeText = {(passwordCreate) => this.setState({passwordCreate})}
+                    value = {this.state.passwordCreate}
+                    placeholder = "Type your Room password"
+                    secureTextEntry={true}
+                    style = {styles.CreateTextInput}
+                    underlineColorAndroid='black'
+                />
+
+                <TouchableOpacity 
+                    style={styles.timePicker}
+                    onPress={()=> this.setState({isDateTimePickerVisible: true})}>
+                   <Text>{this.state.startTime}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style= {styles.confirmBtn}
+                        onPress={()=> this._createRoom()}>
+                        <Text>Create</Text>
+
+                </TouchableOpacity>
 
             </Modal>
+            <DateTimePicker
+                mode='datetime'
+                isVisible={this.state.isDateTimePickerVisible}
+                onConfirm={(date)=>this.handleTimeStart(date)}
+                onCancel={() => this.setState({isDateTimePickerVisible:false})}
+                />
+            
             </KeyboardAvoidingView>
       </View>
     );
@@ -222,7 +282,8 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     modalContainer:{
-        justifyContent:'center', 
+        justifyContent:'center',
+        alignItems:'center',
         shadowRadius:10, 
         height:200,
         width:'70%',
@@ -253,10 +314,17 @@ const styles = StyleSheet.create({
     },
     confirmBtn:{
         width: 100,
-        height:50,
+        height:35,
         backgroundColor: 'green',
         justifyContent:'center',
         alignItems:'center',
         borderRadius:5
+    },
+    CreateTextInput:{
+        width:'80%',
+        marginBottom:10,     
+    },
+    timePicker:{
+        margin:10
     }
 })
