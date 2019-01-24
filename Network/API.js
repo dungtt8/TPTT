@@ -1,6 +1,6 @@
-import { SendUserData, CreateRoomFB, GetListRoom, UpdateListRoom } from "./FirebaseAPI";
+import { SendUserData, CreateRoomFB, GetListRoom, UpdateListRoom, readState } from "./FirebaseAPI";
 
-const URL = "https://vnexpress.net/"
+const URL = "https://reqres.in/api/users?page=2"
 export function SigIn(phone, password){
     return fetch(URL, {
         method: 'POST',
@@ -101,7 +101,7 @@ export function SendAnswer(userID,answer){
         });
     }
 
-    export function GetRanking(){
+export function GetRanking(){
         return fetch(URL,{
             method:'GET',
             headers: {
@@ -178,10 +178,10 @@ export function SendAnswer(userID,answer){
             .catch(err => {
                 console.error(err)
             });
-        }
+    }
 
-    export function GetUserRanking(userID){
-        return fetch(URL, {
+export function GetUserRanking(userID){
+    return fetch(URL, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -207,8 +207,8 @@ export function SendAnswer(userID,answer){
             });
     }
 
-    export function GetRoom(){
-        return(
+export function GetRoom(){
+    return(
             fetch(URL, {
                 method :'GET',
                 headers: {
@@ -253,7 +253,7 @@ export function SendAnswer(userID,answer){
         )
     }
 
-    export function JoinRoom(roomID, roomPass, userData, callback){
+export function JoinRoom(roomID, roomPass, userData, callback){
         return fetch(URL, {
             method: 'POST',
             headers: {
@@ -287,7 +287,7 @@ export function SendAnswer(userID,answer){
             });
     }
 
-    export function CreateRoom(roomName, password, timeStart, rootUser){
+export function CreateRoom(roomName, password, timeStart, rootUser){
         return fetch(URL, {
             method: 'POST',
             headers: {
@@ -317,7 +317,7 @@ export function SendAnswer(userID,answer){
             });
     }
 
-    export function OutRoom(player, room){
+export function OutRoom(player, room){
         return fetch(URL, {
             method: 'POST',
             headers: {
@@ -361,7 +361,49 @@ export function SendAnswer(userID,answer){
             });
     }
 
-    export function SendInvite(list){
+export function SendInvite(list){
         console.log(list)
         return "ok"
     }
+
+export function SendMessage(message, roomInfo, callback){
+    return fetch(URL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            roomInfo: roomInfo,
+            message: message,
+          }),
+        })
+        .then(res =>{
+            return GetListRoom((rooms) => {
+                for (key in rooms){
+                    if(rooms[key].roomID == roomInfo.roomID){
+                        console.log(rooms[key])
+                        rooms[key].messages.push(message)
+                        console.log("Im in Send message API")
+                        console.log(rooms[key].message)
+                        roomGame = rooms[key]
+                        callback(roomGame)
+                    }
+                }
+                // console.log(room)
+                UpdateListRoom(rooms)
+                
+            })}            
+        )
+        .catch(err => {
+            console.error(err)
+        });
+}
+
+export function GetStateAPI(callback){
+    readState((state) =>
+    {
+        console.log(state)
+        callback(state)
+    })
+}

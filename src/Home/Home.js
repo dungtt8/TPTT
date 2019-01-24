@@ -44,7 +44,7 @@ export default class Home extends Component {
   }
 
   onToAccount(){
-
+    this.props.navigation.navigate('Account')
   }
 
   componentDidMount() {
@@ -168,8 +168,8 @@ export default class Home extends Component {
                     <TouchableOpacity onPress={()=> {this.onToPlay()}}>
                         <View style= {styles.boxOption}>
                             <Ionicons
-                                name='ios-play'
-                                color='#009900'
+                                name='ios-play-circle'
+                                color='#80dfff'
                                 size={55}
                             />
                             <Text style={styles.argument}>Play</Text>
@@ -180,7 +180,7 @@ export default class Home extends Component {
                         <View style= {styles.boxOption}>
                             <Ionicons
                                 name='md-paper'
-                                color='#009900'
+                                color='#80dfff'
                                 size={55}
                             />
                             <Text style={styles.argument}>New</Text>
@@ -192,7 +192,7 @@ export default class Home extends Component {
                         <View style= {styles.boxOption}>
                             <Ionicons
                                 name='ios-stats'
-                                color='#009900'
+                                color='#80dfff'
                                 size={55}
                             />
                             <Text style={styles.argument}>Rank</Text>
@@ -203,7 +203,7 @@ export default class Home extends Component {
                         <View style= {styles.boxOption}>
                             <Ionicons
                                 name='ios-person'
-                                color='#009900'
+                                color='#80dfff'
                                 size={55}
                             />
                             <Text style={styles.argument}>Account</Text>
@@ -242,7 +242,7 @@ export default class Home extends Component {
 const styles=StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#9999ff',
+        backgroundColor:'#ffb3b3',
     },
     homeHeader:{
         width:'100%',
@@ -277,7 +277,9 @@ const styles=StyleSheet.create({
     },
     backgroundImage: {
         height:200,
-        width:'100%'
+        width:'100%',
+        borderBottomLeftRadius:5,
+        borderBottomRightRadius:5
     },
     countTime:{
         width:'90%',
@@ -330,7 +332,7 @@ const styles=StyleSheet.create({
     },
     topOption:{
         flex:1, 
-        backgroundColor:'#0066ff', 
+        backgroundColor:'#ff6666', 
         width:'100%', 
         marginBottom: 1,
         borderTopLeftRadius: 5,
@@ -340,7 +342,7 @@ const styles=StyleSheet.create({
     },
     midOption:{
         flex:1, 
-        backgroundColor:'#0066ff', 
+        backgroundColor:'#ff6666', 
         width:'100%',
         marginVertical:1,
         justifyContent:'center',
@@ -348,7 +350,7 @@ const styles=StyleSheet.create({
     },
     bottomOption:{
         flex:1, 
-        backgroundColor:'#0066ff', 
+        backgroundColor:'#ff6666', 
         width:'100%',
         marginTop:1,
         borderBottomLeftRadius: 5,

@@ -8,7 +8,16 @@ export function CreateRoomFB(roomInfo, RootUser){
         startTime: roomInfo.timeStart,
         rootUser: RootUser,
         users:[RootUser],
-        messages:[]
+        messages:[[{
+            _id: 1,
+            text: 'Hello developer',
+            createdAt: new Date(),
+            user: {
+              _id: 2,
+              name: 'React Native',
+              avatar: 'https://placeimg.com/140/140/any',
+            },
+          },],]
     }).then((data) => {
         var res = {
             roomID: roomInfo.roomID,
@@ -36,22 +45,11 @@ export function UpdateListRoom(list){
     firebaseApp.database().ref('Room/').update(list)
 }
 
-export function SendMessage(messages){
-    firebaseApp.database().ref('Room/').push({
-        messages
-    }).then((data)=>{
-        //success callback
-        // console.log('data ' , data)
-    }).catch((error)=>{
-        //error callback
-        // console.log('error ' , error)
-    })
-}
 
 
 
-export function readMessageData(callback) {
-    firebaseApp.database().ref('Messages/').on('value', function (snapshot) {
+export function readState(callback) {
+    firebaseApp.database().ref('Room/').on('value', function (snapshot) {
         console.log(">>>>>>>>>>>>")
         // console.log(snapshot.val())
         result = snapshot.val()

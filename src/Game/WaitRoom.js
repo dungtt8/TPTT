@@ -1,83 +1,55 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
-import { SendMessage, readMessageData, readUserData } from '../../Network/FirebaseAPI';
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import Global from '../../Util/Global';
-import { OutRoom } from '../../Network/API';
+import { OutRoom, SendMessage, GetStateAPI } from '../../Network/API';
 
 export default class WaitRoom extends Component {
 
-  roomInfo = this.props.navigation.getParam('roomInfo', null)
+  // roomInfo = this.props.navigation.getParam('roomInfo', null)
   
   constructor(props) {
     super(props);
     this.state = {
-        messages:[]
+        messages:[],
+        roomInfo: this.props.navigation.getParam('roomInfo', null)
     };
     
   }
-  // componentWillMount() {
-  //   this.setState({
-  //     messages: [
-  //       {
-  //         _id: 1,
-  //         text: 'Hello developer',
-  //         createdAt: new Date(),
-  //         user: {
-  //           _id: 2,
-  //           name: 'React Native',
-  //           avatar: 'https://placeimg.com/140/140/any',
-  //         },
-  //       },
-  //     ],
-  //   })
-  // }
-
+  
   onSend(messages = []) {
-    // console.log(messages)
-    SendMessage(messages)
+    SendMessage(messages, this.state.roomInfo, (room) => console.log(room))
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }))
-    // console.log(this.state.messages)
   }
 
   componentDidMount = () => {
-    readUserData((result) =>{
-      
-    })
-    readMessageData((result)=>{
-      // console.log( result)
-      for( var key in result){
-        // this.setState(prevState => ({
-        //   messages: GiftedChat.append(prevState.messages, result[key].messages[0]),
-        // }))
+    GetStateAPI((state) => {
+      for (key in state){
+        if (state[key].roomID === this.state.roomInfo.roomID){
+          this.setState({
+            roomInfo: state[key]
+          })
 
-        this.setState({
-              messages: [
-                {
-                  _id: 1,
-                  text: 'Hello developer',
-                  createdAt: new Date(),
-                  user: {
-                    _id: 2,
-                    name: 'React Native',
-                    avatar: 'https://placeimg.com/140/140/any',
-                  },
-                },
-              ],
+          var receiverMessage = state[key].messages[state[key].messages.length-1]
+          if(receiverMessage[0].user.name != Global.currentUser.userName){
+            this.setState(previousState => ({
+              messages: GiftedChat.append(previousState.messages, receiverMessage)
             })
+              )
+          }
+          break
+        }
       }
-      // console.log(this.state.messages)
-      return result
     })
     
   };
   
   checkAdminRoom = () => {
-    if (Global.currentUser.userName == this.roomInfo.rootUser.userName){
+    if (Global.currentUser.userName == this.state.roomInfo.rootUser.userName){
       return (
         <TouchableOpacity
           onPress = {()=> this.props.navigation.navigate('War')}>
@@ -94,8 +66,8 @@ export default class WaitRoom extends Component {
   }
 
   _goBack(){
-    if (Global.currentUser.userName != this.roomInfo.rootUser.userName){
-      OutRoom(Global.currentUser, this.roomInfo)
+    if (Global.currentUser.userName != this.state.roomInfo.rootUser.userName){
+      OutRoom(Global.currentUser, this.state.roomInfo)
       this.props.navigation.goBack()
     }else {
       alert("Can't get out your room")
@@ -118,11 +90,11 @@ export default class WaitRoom extends Component {
                 </TouchableOpacity>
                 </View>
                 <View style= {styles.midHeader}>
-                   <Text>{this.roomInfo.roomName}</Text>
+                   <Text>{this.state.roomInfo.roomName}</Text>
                     
                 </View>
                 <View style = {styles.rightHeader}>
-                    <Text style={{fontSize:16, color:"#fff", margin:5}}>{this.roomInfo.users.length}</Text>
+                    <Text style={{fontSize:16, color:"#fff", margin:5}}>{this.state.roomInfo.users.length}</Text>
                     <Icon
                       name = "users"
                       color = "#fff"
@@ -154,7 +126,7 @@ const styles = StyleSheet.create({
     height:50,
     width:'100%',
     flexDirection: 'row',
-    backgroundColor:"#9999ff"
+    backgroundColor:"#ffb3b3"
   },
   leftHeader:{
       flex:1,

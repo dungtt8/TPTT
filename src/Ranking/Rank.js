@@ -56,7 +56,7 @@ export default class Rank extends Component {
     return (
       <View style={styles.container}>
         {console.log("In rank component")}
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
             <TouchableOpacity style={styles.leftHeader}
                 onPress={()=> {this.props.navigation.goBack()}}>
                 <Icon
@@ -76,7 +76,7 @@ export default class Rank extends Component {
                     size = {20}
                 />
             </TouchableOpacity>
-            </View>
+            </View> */}
         <View style={styles.TopRank}>
 
             <View style = {styles.Top3Ranking}>
@@ -172,14 +172,15 @@ export default class Rank extends Component {
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#9999ff',
+        backgroundColor:'#ffb3b3',
         alignItems:'center'
     },
     header:{
-        height:50,
+        // height:50,
         width:'90%',
         margin: 10,
         flexDirection: 'row',
+        flex:1
     },
     leftHeader:{
         flex:1,
@@ -203,8 +204,9 @@ const styles = StyleSheet.create({
     },
     TopRank:{
         flexDirection:'row',
-        height:200,
-        width:'100%'
+        // height:200,
+        width:'100%',
+        flex:4
     },
     Top3Ranking:{
         flex:1
@@ -246,7 +248,7 @@ const styles = StyleSheet.create({
         marginHorizontal:10,
         // height:200,
         width:'100%',
-        flex:1
+        flex:5
     },
     userRanking:{
         position:'relative',

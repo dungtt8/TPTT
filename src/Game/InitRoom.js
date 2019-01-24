@@ -230,7 +230,7 @@ export default class InitRoom extends Component {
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#9999ff',
+        backgroundColor:'#ffb3b3',
         alignItems:'center',
     },
     header:{
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     createRoomBtn:{
         width:'100%',
         height:80,
-        backgroundColor:'#00cc99',
+        backgroundColor:'#ff6666',
         justifyContent:'center',
         alignItems:'center'
     },

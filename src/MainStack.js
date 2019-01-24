@@ -11,6 +11,8 @@ import InitRoom from './Game/InitRoom';
 import WaitRoom from './Game/WaitRoom';
 import Change from './ChangeReward/Change';
 import TabRank from './Ranking/TabRank';
+import ViewPager from './ChangeReward/ViewPager';
+import AccountManager from './Account/AccountManager';
 YellowBox.ignoreWarnings(['Warning: ReactNative.createElement']);
 
 const  MainStack = createStackNavigator({
@@ -21,7 +23,7 @@ const  MainStack = createStackNavigator({
         screen:Home,
     },
     Ranking:{
-        screen: Rank,
+        screen: TabRank,
     },
     War: {
         screen:War,
@@ -37,6 +39,12 @@ const  MainStack = createStackNavigator({
     },
     Change: {
         screen:Change
+    },
+    view:{
+        screen: ViewPager
+    },
+    Account:{
+        screen:AccountManager
     }
 
 },{

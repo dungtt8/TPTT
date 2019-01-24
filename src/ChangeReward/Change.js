@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ViewPager from './ViewPager';
 export default class Change extends Component {
   constructor(props) {
     super(props);
@@ -33,28 +34,31 @@ export default class Change extends Component {
       <ImageBackground
         source={{uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZXVlm_b5LjIXmHQtS5wFwrachkfgdpyuNRT2kugx-El4CUiOneA"}}
         style = {{flex:1}}>
-            <View style={styles.header}>
-                <View style={styles.leftHeader}>
-                    <TouchableOpacity 
-                        style={styles.leftHeader}
-                        onPress = {() => this.props.navigation.goBack()}>
-                    <Icon
-                        name = 'long-arrow-left'
-                        color= '#fff'
-                        size= {30}
-                    />
-                </TouchableOpacity>
-                </View>
-                <View style= {styles.midHeader}>
-                   <Text>Change Reward</Text>
-                    
-                </View>
-                <View style = {styles.rightHeader}>
-                    
-                </View>
+            <ViewPager/>
+            <View style = {{width:'100%', flex:2}}>
+                <View style={styles.header}>
+                    <View style={styles.leftHeader}>
+                        <TouchableOpacity 
+                            style={styles.leftHeader}
+                            onPress = {() => this.props.navigation.goBack()}>
+                        <Icon
+                            name = 'long-arrow-left'
+                            color= '#fff'
+                            size= {30}
+                        />
+                    </TouchableOpacity>
+                    </View>
+                    <View style= {styles.midHeader}>
+                    {/* <Text>Change Reward</Text> */}
+                        
+                    </View>
+                    <View style = {styles.rightHeader}>
+                        
+                    </View>
 
-                
+                </View>
             </View>
+            
             <TouchableOpacity style={styles.topChange}
                 onPress= {()=> this._onChange("Day")}>
                 <View style = {styles.topDay}>
@@ -64,7 +68,7 @@ export default class Change extends Component {
                         resizeMode = "center"
                     />
                     <View style = {{flex:2, height:'80%', alignItems:'center', justifyContent:'center'}}>
-                        <Text style={{color:'#fff', fontSize:20}}>20 Giải nhất ngày trị giá 100.000đ</Text>
+                        <Text style={{color:'#FFF', fontSize:20}}>20 Giải nhất ngày trị giá 100.000đ</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -78,7 +82,7 @@ export default class Change extends Component {
                         resizeMode = "center"
                     />
                     <View style = {{flex:2, height:'80%', alignItems:'center', justifyContent:'center'}}>
-                        <Text style={{color:'#fff', fontSize:20}}>10 Giải nhất tuần trị giá 500.000đ</Text>
+                        <Text style={{color:'#FFCCCC', fontSize:20}}>10 Giải nhất tuần trị giá 500.000đ</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -92,7 +96,7 @@ export default class Change extends Component {
                         resizeMode = "center"
                     />
                     <View style = {{flex:2, height:'80%', alignItems:'center', justifyContent:'center'}}>
-                        <Text style={{color:'#fff', fontSize:20}}>3 Giải nhì tháng trị giá 1.000.000đ</Text>
+                        <Text style={{color:'#FFCCCC', fontSize:20}}>3 Giải nhì tháng trị giá 1.000.000đ</Text>
                     </View>
                 </View>
             </TouchableOpacity> */}
@@ -106,8 +110,8 @@ export default class Change extends Component {
                         resizeMode = "center"
                     />
                     <View style = {{flex:2, height:'80%', alignItems:'center', justifyContent:'center'}}>
-                        <Text style={{color:'#fff', fontSize:20}}>- 2 Giải nhất Tháng 1 Điện thoại Samsung A8</Text>
-                        <Text style = {{color:"#fff", fontSize:18}}>- 3 Giải nhì tháng trị giá 1.000.000đ</Text>
+                        <Text style={{color:'#FFCCCC', fontSize:20}}>- 2 Giải nhất Tháng 1 Điện thoại Samsung A8</Text>
+                        <Text style = {{color:"#FFCCCC", fontSize:18}}>- 3 Giải nhì tháng trị giá 1.000.000đ</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -121,7 +125,7 @@ export default class Change extends Component {
                         resizeMode = "center"
                     />
                     <View style = {{flex:2, height:'80%', alignItems:'center', justifyContent:'center'}}>
-                        <Text style={{color:'#fff', fontSize:20}}>1 Giải đặc biệt 1 điện thoại Iphone XsMax</Text>
+                        <Text style={{color:'#FFCCCC', fontSize:20}}>1 Giải đặc biệt 1 điện thoại Iphone XsMax</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -135,7 +139,7 @@ const styles = StyleSheet.create({
         height:80,
         width:'100%',
         flexDirection: 'row',
-        backgroundColor:"#9999ff"
+        // backgroundColor:"#9999ff"
       },
       leftHeader:{
           flex:1,
@@ -157,13 +161,14 @@ const styles = StyleSheet.create({
         padding:5
       },
       topChange:{
+          flex:1,
           width:'100%',
           padding:8
       },
       topDay:{
         width:'100%',
         height:100,
-        backgroundColor:'#ff5500',
+        backgroundColor:'#1affff',
         borderRadius: 10,
         flexDirection:'row',
         justifyContent:'center',
@@ -172,7 +177,7 @@ const styles = StyleSheet.create({
       topWeek:{
         width:'100%',
         height:100,
-        backgroundColor:'#66ff33',
+        backgroundColor:'#00e6e6',
         borderRadius: 10,
         flexDirection:'row',
         justifyContent:'center',
@@ -181,7 +186,7 @@ const styles = StyleSheet.create({
       topMonth:{
         width:'100%',
         height:100,
-        backgroundColor:'#0099ff',
+        backgroundColor:'#00b3b3',
         borderRadius: 10,
         flexDirection:'row',
         justifyContent:'center',
@@ -190,7 +195,7 @@ const styles = StyleSheet.create({
       secondMonth:{
         width:'100%',
         height:100,
-        backgroundColor:'#ff00ff',
+        backgroundColor:'#00b3b3',
         borderRadius: 10,
         flexDirection:'row',
         justifyContent:'center',
@@ -199,7 +204,7 @@ const styles = StyleSheet.create({
       special:{
         width:'100%',
         height:100,
-        backgroundColor:'red',
+        backgroundColor:'#009999',
         borderRadius: 10,
         flexDirection:'row',
         justifyContent:'center',
