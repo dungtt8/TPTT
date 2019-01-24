@@ -3,6 +3,9 @@ package com.tptt;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 // import io.invertase.firebase.RNFirebasePackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -27,10 +30,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            // new RNFirebasePackage(),
-            new ReactNativeContacts(),
             new VectorIconsPackage(),
-            new RNGestureHandlerPackage()
+            new RNGestureHandlerPackage(),
+            new ReactNativeContacts()
+            // new RNFirebasePackage(),
+            
       );
     }
 
